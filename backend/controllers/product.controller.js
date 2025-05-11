@@ -128,7 +128,7 @@ export const getProductsByCategory = async (req, res) => {
         .status(404)
         .json({ message: "No products found in this category" });
     }
-    res.status(200).json(products);
+    res.status(200).json({ products });
   } catch (error) {
     console.error("Error in getProductsByCategory: ", error);
     res.status(500).json({ message: error.message });

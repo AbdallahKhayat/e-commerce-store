@@ -3,10 +3,10 @@ import toast from "react-hot-toast";
 import axios from "../lib/axios";
 
 export const useProductStore = create((set) => ({
-  product: [],
+  products: [],
   loading: false,
 
-  setProducts: (products) => set({ product: products }),
+  setProducts: (products) => set({ products: products }),
 
   createProduct: async (productData) => {
     set({ loading: true });
@@ -15,7 +15,7 @@ export const useProductStore = create((set) => ({
       const res = await axios.post("/products", productData);
 
       set((prevState) => ({
-        product: [...prevState.product, res.data],
+        products: [...prevState.products, res.data],
         loading: false,
       }));
       toast.success("Product created successfully");
@@ -28,10 +28,23 @@ export const useProductStore = create((set) => ({
     set({ loading: true });
     try {
       const res = await axios.get("/products");
-      set({ product: res.data.products, loading: false });
+      set({ products: res.data.products, loading: false });
     } catch (error) {
       set({ loading: false });
       toast.error(error.response.data.err || "Error in fetchAllProducts");
+    }
+  },
+
+  fetchProductsByCategory: async (category) => {
+    set({ loading: true });
+    try {
+      const res = await axios.get(`/products/category/${category}`);
+      set({ products: res.data.products, loading: false });
+    } catch (error) {
+      set({ loading: false });
+      toast.error(
+        error.response.data.err || "Error in fetchProductsByCategory"
+      );
     }
   },
 
@@ -41,7 +54,7 @@ export const useProductStore = create((set) => ({
       const res = await axios.patch(`/products/${productId}`);
       // this will update the isFeatured prop of the product
       set((prevProducts) => ({
-        product: prevProducts.product.map((product) =>
+        products: prevProducts.products.map((product) =>
           product._id === productId
             ? { ...product, isFeatured: res.data.isFeatured }
             : product
@@ -61,10 +74,10 @@ export const useProductStore = create((set) => ({
       await axios.delete(`/products/${productId}`);
 
       set((prevProducts) => {
-        const updatedProducts = prevProducts.product.filter(
+        const updatedProducts = prevProducts.products.filter(
           (product) => product._id !== productId
         );
-        return { product: updatedProducts, loading: false };
+        return { products: updatedProducts, loading: false };
       });
       toast.success("Product deleted successfully");
     } catch {
