@@ -8,7 +8,7 @@ export const getAllProducts = async (req, res) => {
     if (!products) {
       return res.status(404).json({ message: "No products found" });
     }
-    res.status(200).json(products);
+    res.status(200).json({ products });
   } catch (error) {
     console.error("Error in getAllProducts: ", error);
     res.status(500).json({ message: error.message });
