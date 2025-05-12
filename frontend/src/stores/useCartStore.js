@@ -8,6 +8,7 @@ export const useCartStore = create((set, get) => ({
   total: 0,
   subtotal: 0,
   loading: false,
+  isCouponApplied: false,
 
   getCartItems: async () => {
     try {
@@ -90,8 +91,8 @@ export const useCartStore = create((set, get) => ({
     }
 
     set({
-      subtotal: subtotal.toFixed(2),
-      total: total.toFixed(2),
+      subtotal,
+      total,
     });
   },
 }));
