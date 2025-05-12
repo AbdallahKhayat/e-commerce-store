@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-export const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -36,9 +36,10 @@ export const userSchema = new mongoose.Schema(
       default: "customer",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
-
 // Pre-save hook to hash the password before saving to database
 
 // before saving the user run this function
