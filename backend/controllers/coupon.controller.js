@@ -17,10 +17,10 @@ export const getCoupon = async (req, res) => {
 };
 
 export const validateCoupon = async (req, res) => {
-  const { couponCode } = req.body;
   try {
+    const { code } = req.body;
     const coupon = await Coupon.findOne({
-      code: couponCode,
+      code: code,
       userId: req.user._id,
       isActive: true,
     });
@@ -28,21 +28,20 @@ export const validateCoupon = async (req, res) => {
     if (!coupon) {
       return res.status(404).json({ message: "Coupon not found" });
     }
+
     if (coupon.expirationDate < new Date()) {
       coupon.isActive = false;
       await coupon.save();
-      return res.status(400).json({ message: "Coupon has expired" });
+      return res.status(404).json({ message: "Coupon expired" });
     }
 
-    res.status(200).json({
+    res.json({
       message: "Coupon is valid",
       code: coupon.code,
       discountPercentage: coupon.discountPercentage,
     });
   } catch (error) {
-    console.error("Error in validateCoupon:", error.message);
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    console.log("Error in validateCoupon controller", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
