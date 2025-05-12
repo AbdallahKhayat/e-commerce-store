@@ -20,7 +20,7 @@ export const userSchema = new mongoose.Schema(
     },
     cartItems: [
       {
-        quanity: {
+        quantity: {
           type: Number,
           default: 1,
         },
